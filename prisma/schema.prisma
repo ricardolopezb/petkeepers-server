@@ -1,0 +1,219 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  @@map("roles")
+  id String @id @default(uuid())
+  type String @unique
+  users UsersToRoles[]
+}
+
+model Trait {
+  @@map("traits")
+  id String @id @default(uuid())
+  name String @unique
+  feeling Feeling
+  userUserReviews UserUserReviewsTraits[] @relation("traits_in_user_user_reviews")
+}
+
+enum Feeling {
+  POSSITIVE
+  NEGATIVE
+  NEUTRAL
+}
+
+model BookingType {
+  @@map("booking_type")
+  id String @id @default(uuid())
+  type String @unique
+  bookings Booking[]
+}
+
+model ReviewFeeling {
+  @@map("review_feeling")
+  id String @id @default(uuid())
+  type String @unique
+}
+
+enum BookingStatus {
+  REQUESTED
+  ACCEPTED
+  REJECTED
+  IN_PROGRESS
+  FINISHED
+  CLOSED
+}
+
+
+model User{
+  @@map("users")
+  id String @id @default(uuid())
+  firstName String
+  lastName String
+  
+  dob DateTime @db.Date
+  email String @unique
+  password String
+  bio String?
+  petDescription String?
+  roles UsersToRoles[]
+  
+  bookingsRequested Booking[] @relation("booking_client")
+  bookingsReceived Booking[] @relation("booking_worker")
+
+  userReviewsReceived UserUserReviews[] @relation("user_user_review_receiver")
+  userReviewsMade UserUserReviews[] @relation("user_user_review_reviewer")
+
+  pets Pet[] 
+  address_id String
+  address Address @relation(fields: [address_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+}
+
+model UsersToRoles {
+  @@map("users_roles")
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  role Role @relation(fields: [roleId], references: [id])
+  roleId String
+
+  @@id([userId, roleId])
+
+}
+
+// model Address {
+//   @@map("addresses")
+//   id String @id @default(uuid())
+//   number String
+//   street String
+//   secondLine String?
+//   cityId String
+//   city City @relation(fields: [cityId], references: [id])
+//   users User[]
+// }
+
+model Address {
+  @@map("addresses")
+  id String @id @default(uuid())
+  address String
+  latitude Float
+  longitude Float
+  users User[]
+}
+
+// model City {
+//   @@map("cities")
+//   id String @id @default(uuid())
+//   name String
+//   addresses Address[]
+//   state_or_province_id String
+//   state_or_province State @relation(fields: [state_or_province_id], references: [id])
+// }
+
+// model State {
+//   @@map("states")
+//   id String @id @default(uuid())
+//   name String
+//   cities City[]
+//   country_id String
+//   country Country @relation(fields: [country_id], references: [id])
+// }
+
+// model Country {
+//   @@map("countries")
+//   id String @id @default(uuid())
+//   name String @unique
+//   states State[]
+// }
+
+
+model Animal {
+  @@map("animals")
+  id String @id @default(uuid())
+  name String @unique
+  pets Pet[]
+}
+
+model Pet{
+  @@map("pets")
+  id String @id @default(uuid())
+  name String
+  animalId String
+  animal Animal @relation(fields: [animalId], references: [id])
+  breed String?
+  yearOfBirth Int
+  description String?
+
+  ownerId String
+  owner User @relation(fields: [ownerId], references: [id])
+
+  appearsInBookings PetsInBooking[]
+}
+
+model Booking {
+  @@map("bookings")
+  id String @id @default(uuid())
+  bookingTypeId String
+  type BookingType @relation(fields: [bookingTypeId], references: [id])
+  startDate DateTime
+  endDate DateTime
+  status BookingStatus
+  clientId String
+  client User @relation("booking_client", fields: [clientId], references: [id])
+
+  workerId String
+  worker User @relation("booking_worker", fields: [workerId], references: [id])
+
+  petsInvolved PetsInBooking[]
+}
+
+model PetsInBooking {
+  @@map("pets_in_booking")
+  petId String
+  pet Pet @relation(fields: [petId], references: [id])
+  bookingId String
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@id([bookingId, petId])
+}
+
+model UserUserReviews {
+  @@map("user_user_reviews")
+  id String @id @default(uuid())
+  receiverUserId String
+  receiverUser User @relation("user_user_review_receiver", fields: [receiverUserId], references: [id])
+
+  reviewerUserId String
+  reviewerUser User @relation("user_user_review_reviewer", fields: [reviewerUserId], references: [id])
+
+  points Float
+  description String?
+
+  userUserReviewTraits UserUserReviewsTraits[]
+}
+
+model UserUserReviewsTraits {
+  @@map("user_user_reviews_traits")
+  userUserReviewId String
+  userUserReview UserUserReviews @relation(fields: [userUserReviewId], references: [id])
+
+  traitId String
+  trait Trait @relation("traits_in_user_user_reviews", fields: [traitId], references: [id])
+
+  @@id([userUserReviewId, traitId])
+
+}
+
