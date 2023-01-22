@@ -1,20 +1,26 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { JwtGuard } from '../auth/guards/jwt.guard';
-import { HasRoles } from '../auth/decorators/has-role.decorator';
-import { AndRoleGuard } from '../auth/guards/and-role.guard';
-import { OrRoleGuard } from '../auth/guards/or-role.guard';
+import { AndRoleGuard, JwtGuard } from '../auth/guards';
+import { GetUser, HasRoles } from '../auth/decorators';
+
 
 @Controller('user')
+@UseGuards(JwtGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
   @HasRoles('user', 'admin')
-  @UseGuards(JwtGuard, AndRoleGuard)
+  @UseGuards(AndRoleGuard)
   hello(){
     return "paso el JWT"
   }
+
+  @Get('/me')
+  getMe(@GetUser('id') userId: string){
+    return this.userService.getMe(userId)
+  }
+
 
 
 }
