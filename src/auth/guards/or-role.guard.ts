@@ -12,9 +12,9 @@ export class OrRoleGuard implements CanActivate {
         private reflector: Reflector, 
         @Inject(forwardRef(() => UserService)) private userService: UserService
     ){
-        const matchingFunction = (requiredRoles, userRoles) => {
-            if(!userRoles) return false;
-            return requiredRoles.some((requiredRole) => userRoles.includes(requiredRole))
+        const matchingFunction = async (requiredRoles, userRoles) => {
+            if(!userRoles) return new Promise<boolean>(()=> false);
+            return new Promise<boolean>(requiredRoles.some((requiredRole) => userRoles.includes(requiredRole)))
         }
         this.baseRoleGuard = new BaseRoleGuard(reflector, userService, matchingFunction)
     }

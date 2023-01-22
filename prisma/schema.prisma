@@ -13,7 +13,7 @@ datasource db {
 model Role {
   @@map("roles")
   id String @id @default(uuid())
-  type String @unique
+  name String @unique
   users UsersToRoles[]
 }
 
