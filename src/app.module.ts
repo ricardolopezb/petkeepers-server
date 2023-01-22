@@ -4,7 +4,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { LocalizationModule } from './localization/localization.module';
 import { AdminModule } from './admin/admin.module';
-import { OwnerModule } from './owner/owner.module';
+import { UserModule } from './user/user.module';
 
 
 @Module({
@@ -16,7 +16,7 @@ import { OwnerModule } from './owner/owner.module';
     }),
     LocalizationModule,
     AdminModule,
-    OwnerModule,
+    UserModule,
   ],
 })
 export class AppModule {}
