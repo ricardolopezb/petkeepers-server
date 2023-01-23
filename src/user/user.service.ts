@@ -2,12 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 import { clear } from 'console';
+import { GetUsersDto } from './dto';
 
 @Injectable()
 export class UserService {
+
+    getUsers(query: GetUsersDto){
+        if(query.roleId) return this.getUsersByRoleId(query.roleId)
+
+    }
+
+
+
     async getUsersByRoleId(roleId: string) {
-        console.log("received param", roleId);
-        
       const users = await this.prisma.user.findMany({
         where: {
             roles: {
