@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 import { clear } from 'console';
@@ -54,6 +54,7 @@ export class UserService {
             id: userId
         }
       })
+      if(!user) throw new ForbiddenException("User does not exist")
       
       const cleanUser = this.stripUserUnnecessaryFields(user)
       return cleanUser
