@@ -33,8 +33,8 @@ export class AuthService {
                     petDescription: dto.petDescription,
                     roles: {
                         createMany: {
-                            data: dto.rolesIds.map((role) => {
-                                return {roleId: role}
+                            data: dto.roleNames.map((role) => {
+                                return {roleName: role}
                             })
                         }
                     },
@@ -43,7 +43,7 @@ export class AuthService {
                             data: dto.pets.map((pet) => {
                                 return {
                                     name: pet.name,
-                                    animalId: pet.animalId,
+                                    animalName: pet.animalName,
                                     breed: pet.breed,
                                     yearOfBirth: pet.yearOfBirth,
                                     description: pet.description
@@ -87,6 +87,7 @@ export class AuthService {
             }
         })
         checkIfUserWasFound();
+        checkIfUserIsDeleted();
         const passwordMatch = await comparePasswords();
         checkPasswordMatch();
 
@@ -105,6 +106,10 @@ export class AuthService {
         function checkIfUserWasFound() {
             if (!userInDatabase)
                 throw new UnauthorizedException("Incorrect credentials.");
+        }
+        function checkIfUserIsDeleted() {
+            if (userInDatabase.deleted)
+                throw new UnauthorizedException("User is deleted.");
         }
     }
 

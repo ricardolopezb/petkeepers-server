@@ -4,6 +4,6 @@ export class GetUsersDto {
 
     @IsOptional()
     @IsString()
-    roleId?: string
+    roleName?: string
 
 }

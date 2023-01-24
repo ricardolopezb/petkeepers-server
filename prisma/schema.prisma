@@ -77,6 +77,7 @@ model User{
   address_id String
   address Address @relation(fields: [address_id], references: [id])
 
+  deleted Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -87,10 +88,10 @@ model UsersToRoles {
   user User @relation(fields: [userId], references: [id])
   userId String
 
-  role Role @relation(fields: [roleId], references: [id])
-  roleId String
+  role Role @relation(fields: [roleName], references: [name])
+  roleName String
 
-  @@id([userId, roleId])
+  @@id([userId, roleName])
 
 }
 
@@ -151,8 +152,8 @@ model Pet{
   @@map("pets")
   id String @id @default(uuid())
   name String
-  animalId String
-  animal Animal @relation(fields: [animalId], references: [id])
+  animalName String
+  animal Animal @relation(fields: [animalName], references: [name])
   breed String?
   yearOfBirth Int
   description String?

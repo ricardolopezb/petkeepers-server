@@ -6,30 +6,46 @@ import { GetUsersDto } from './dto';
 
 @Injectable()
 export class UserService {
-
-    getUsers(query: GetUsersDto){
-        if(query.roleId) return this.getUsersByRoleId(query.roleId)
+    async deleteUser(userId: string) {
+        try{
+            const user = await this.prisma.user.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    deleted: true
+                }
+            })
+            return this.stripUserUnnecessaryFields(user);
+        }
+        catch(error){
+            this.prisma.readError(error);
+        }
 
     }
 
+    getUsers(query: GetUsersDto){
+        if(query.roleName) return this.getUsersByRoleId(query.roleName)
+        return this.getAllUsers()
+    }
 
-
-    async getUsersByRoleId(roleId: string) {
+    async getUsersByRoleId(roleName: string) {
       const users = await this.prisma.user.findMany({
         where: {
             roles: {
                 some: {
-                    roleId
+                    roleName
                 }
             } 
         }
       })
-      return this.clearUsersInList(users)
+      return this.stripUsersInList(users)
     }
     constructor(private prisma: PrismaService) {}
+    
     async getAllUsers() {
       const users = await this.prisma.user.findMany()
-      return this.clearUsersInList(users)
+      return this.stripUsersInList(users)
     }
    
     async getUserById(userId: string) {
@@ -43,7 +59,7 @@ export class UserService {
       return cleanUser
     }
 
-    clearUsersInList(users: User[]){
+    stripUsersInList(users: User[]){
         return users.map((user) => this.stripUserUnnecessaryFields(user))
     }
 
@@ -52,9 +68,7 @@ export class UserService {
         delete clonedUser.password
         delete clonedUser.createdAt
         delete clonedUser.updatedAt
-
         return clonedUser
-
     }
     
     async getUserRolesById(userId: string): Promise<string[]> {

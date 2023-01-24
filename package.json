@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "db:clear-and-apply-migration":"yarn db:dev:rm && yarn db:dev:up && sleep 1 && npx prisma migrate dev && npx prisma db push ",
     "prisma:dev:deploy": "prisma migrate deploy",
     "db:dev:rm": "docker compose rm dev-db -s -f -v",
     "db:dev:up": "docker compose up dev-db -d",

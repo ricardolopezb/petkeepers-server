@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AndRoleGuard, JwtGuard } from '../auth/guards';
 import { GetUser, HasRoles } from '../auth/decorators';
@@ -11,19 +11,27 @@ export class UserController {
 
 
   @Get('me')
+  //@UseGuards(AndRoleGuard)
   getMe(@GetUser('id') userId: string){
     return this.userService.getUserById(userId)
   }
 
   @Get()
-  getAllUsers(@Query() query: GetUsersDto){
+  getUsers(@Query() query: GetUsersDto){
     return this.userService.getUsers(query)
   }
 
   @Get(':userId')
   getUserById(@Param('userId') userId: string){
-    console.log("yo");
     return this.userService.getUserById(userId)
   }
+
+  @Delete()
+  deleteUser(@GetUser('id') userId: string){
+    return this.userService.deleteUser(userId)
+  }
+
+  
+ 
 
 }

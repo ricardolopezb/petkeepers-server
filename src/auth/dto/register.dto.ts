@@ -32,7 +32,7 @@ export class RegisterDto {
     petDescription?: string
 
     @IsNotEmpty()
-    rolesIds: string[]
+    roleNames: string[]
 
     @IsOptional()
     pets: Pet[]
