@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { LocalizationModule } from './localization/localization.module';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
-import { RoleModule } from './role/role.module';
 import { PetModule } from './pet/pet.module';
 
 
@@ -19,7 +18,6 @@ import { PetModule } from './pet/pet.module';
     LocalizationModule,
     AdminModule,
     UserModule,
-    RoleModule,
     PetModule,
   ],
 })

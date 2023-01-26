@@ -1,34 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { RoleNameDto } from './dto/role-name.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { PrismaService } from '../../prisma/prisma.service';
+import { AnimalNameDto } from '../dto';
+
 
 @Injectable()
-export class RoleService {
+export class AnimalService {
     constructor(private prisma: PrismaService){}
 
-    async createRole(dto: RoleNameDto){
+    async createAnimal(dto: AnimalNameDto){
         try{
-            const role = await this.prisma.role.create({
+            const animal = await this.prisma.animal.create({
                 data: {
                     name: dto.name
                 }
             })
-            return role;
+            return animal;
         } catch(error){
             this.prisma.readError(error)
         }
 
     }
 
-    async deleteRole(dto: RoleNameDto){
+    async deleteAnimal(dto: AnimalNameDto){
         try {
-            const role = await this.prisma.role.delete({
+            const animal = await this.prisma.animal.delete({
                 where: {
                     name: dto.name
                 }
             })
-            return role;
+            return animal;
         } catch(error){
             this.prisma.readError(error)
         }
