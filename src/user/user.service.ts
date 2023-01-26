@@ -131,6 +131,10 @@ export class UserService {
       const user = await this.prisma.user.findUnique({
         where: {
             id: userId
+        },
+        include:{
+            roles: true,
+            address: true
         }
       })
       if(!user) throw new ForbiddenException("User does not exist")
