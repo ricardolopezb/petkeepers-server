@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
-import { AndRoleGuard, JwtGuard } from '../auth/guards';
+import { AndRoleGuard, JwtGuard, OrRoleGuard } from '../auth/guards';
 import { GetUser, HasRoles } from '../auth/decorators';
 import { PetService } from './pet.service';
 import { CreatePetDto, EditPetDto } from './dto';
 
 @Controller('pets')
-@HasRoles('OWNER')
-@UseGuards(JwtGuard, AndRoleGuard)
+@HasRoles('OWNER', 'ADMIN')
+@UseGuards(JwtGuard, OrRoleGuard)
 export class PetController {
     constructor(private petService: PetService){}
     @Get()
@@ -28,8 +28,6 @@ export class PetController {
     editPet(@GetUser('id') userId: string, @Param('id', ParseUUIDPipe) petId: string, @Body() dto: EditPetDto){
         this.petService.editPet(userId, petId, dto)
     }
-
-
 
     @Delete(':id')
     deletePet(@GetUser('id') userId: string, @Param('id', ParseUUIDPipe) petId: string){

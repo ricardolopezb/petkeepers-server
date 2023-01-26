@@ -14,7 +14,7 @@ export class OrRoleGuard implements CanActivate {
     ){
         const matchingFunction = async (requiredRoles, userRoles) => {
             if(!userRoles) return new Promise<boolean>(()=> false);
-            return new Promise<boolean>(requiredRoles.some((requiredRole) => userRoles.includes(requiredRole)))
+            return requiredRoles.some((requiredRole) => userRoles.includes(requiredRole))
         }
         this.baseRoleGuard = new BaseRoleGuard(reflector, userService, matchingFunction)
     }

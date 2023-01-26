@@ -13,9 +13,6 @@ export class AndRoleGuard implements CanActivate {
         @Inject(forwardRef(() => UserService)) private userService: UserService
     ){
         const matchingFunction = (requiredRoles, userRoles) => {
-            console.log("REQ ROLE", requiredRoles);
-            console.log("USER ROLE", userRoles);
-            
             if(!userRoles) return false;
             return requiredRoles.every((requiredRole) => userRoles.includes(requiredRole))
         }

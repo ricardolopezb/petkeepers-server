@@ -8,12 +8,10 @@ export class CreatePetDto {
     
     @IsString()
     @IsNotEmpty()
-    @IsAlpha()
     animalName: string
 
     @IsOptional()
     @IsString()
-    @IsAlpha()
     breed?: string
 
     @IsNotEmpty()
