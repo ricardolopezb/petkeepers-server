@@ -6,6 +6,7 @@ import { LocalizationModule } from './localization/localization.module';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { PetModule } from './pet/pet.module';
+import { BookingModule } from './booking/booking.module';
 
 
 @Module({
@@ -19,6 +20,7 @@ import { PetModule } from './pet/pet.module';
     AdminModule,
     UserModule,
     PetModule,
+    BookingModule,
   ],
 })
 export class AppModule {}

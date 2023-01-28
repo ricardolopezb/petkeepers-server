@@ -26,7 +26,7 @@ model Trait {
 }
 
 enum Feeling {
-  POSSITIVE
+  POSITIVE
   NEGATIVE
   NEUTRAL
 }

@@ -134,7 +134,8 @@ export class UserService {
         },
         include:{
             roles: true,
-            address: true
+            address: true,
+            pets: true
         }
       })
       if(!user) throw new ForbiddenException("User does not exist")
