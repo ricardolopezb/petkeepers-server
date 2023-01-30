@@ -167,7 +167,7 @@ model Pet{
 model Booking {
   @@map("bookings")
   id String @id @default(uuid())
-  bookingTypeId String
+  bookingTypeId String 
   type BookingType @relation(fields: [bookingTypeId], references: [id])
   startDate DateTime
   endDate DateTime
@@ -179,6 +179,11 @@ model Booking {
   worker User @relation("booking_worker", fields: [workerId], references: [id])
 
   petsInvolved PetsInBooking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  
 }
 
 model PetsInBooking {
@@ -211,10 +216,10 @@ model UserUserReviewsTraits {
   userUserReviewId String
   userUserReview UserUserReviews @relation(fields: [userUserReviewId], references: [id])
 
-  traitId String
-  trait Trait @relation("traits_in_user_user_reviews", fields: [traitId], references: [id])
+  traitName String
+  trait Trait @relation("traits_in_user_user_reviews", fields: [traitName], references: [name])
 
-  @@id([userUserReviewId, traitId])
+  @@id([userUserReviewId, traitName])
 
 }
 

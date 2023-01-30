@@ -7,7 +7,28 @@ export class BookingService {
     constructor(private prisma: PrismaService){}
 
 
-    requestBooking(dto: RequestBookingDto) {
-        throw new Error('Method not implemented.');
+    async requestBooking(dto: RequestBookingDto) {
+        // try{
+        //     const booking = await this.prisma.booking.create({
+        //         data: {
+        //             type: {
+        //                 connect: {
+        //                     type: dto.bookingType
+        //                 }
+        //             },
+        //             startDate: dto.startDate
+
+
+
+        //         }
+
+
+        //     })
+
+
+
+        // } catch(error){
+        //     this.prisma.readError(error)
+        // }
     }
 }
